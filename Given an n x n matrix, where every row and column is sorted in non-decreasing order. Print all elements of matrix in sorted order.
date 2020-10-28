@@ -1,0 +1,74 @@
+Given an n x n matrix, where every row and column is sorted in non-decreasing order. Print all elements of matrix in sorted order.
+
+
+
+
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+int a[101][101],n;
+vector<struct node> h;
+struct node{
+    int i,j,e;
+};
+void addheapify(struct node s1){
+    h.push_back(s1);
+    int c=h.size()-1,p=((c+1)/2)-1;
+    if(p<0)
+    return;
+   while((p>=0) && (h[p].e>h[c].e)){
+       swap(h[p],h[c]);
+       c=p;
+       p=((p+1)/2)-1;
+   }
+}
+void delheapify(){
+    if(h.size()>0){
+    struct node s;
+     s=h[0];
+     h[0]=h[h.size()-1];
+     h.pop_back();
+    int p=0,c=2;
+    while(h.size()>c){
+        if(h[c].e<h[c-1].e && h[p].e>h[c].e)
+        swap(h[c],h[p]),p=c,c=2*p+2;
+        else if(h[p].e>h[c-1].e)
+        swap(h[c-1],h[p]),p=c-1,c=2*p+2;
+        else{
+        c=-1;
+        break;}
+    }
+    if(c==h.size() && h[p].e>h[c-1].e)
+        swap(h[p],h[c-1]);
+    cout<<s.e<<" ";
+    if(s.j<n){
+    s.e=a[s.i][s.j++];
+    addheapify(s);
+    }
+    
+    delheapify();
+}}
+int main() {
+    int t;
+    cin>>t;
+    while(t-->0)
+    {int k;
+    cin>>n;
+    //int N=n;
+	//int a[n][n];
+	for(int i=0;i<n;i++)
+	for(int j=0;j<n;j++)
+	cin>>a[i][j];
+	//vector<struct node> h(n);
+	for(int i1=0;i1<n;i1++){
+	    struct node s2;
+	    s2.e=a[i1][0];
+	    s2.i=i1;
+	    s2.j=1;
+	    addheapify(s2);
+	}
+	delheapify();
+        cout<<endl;
+    }
+	return 0;
+}
